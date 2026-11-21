@@ -2,6 +2,7 @@
 (function () {
   var S = window.SITE || {};
   var TODO = '<span class="todo">[확인 필요]</span>';
+  var hideEmpty = (S.showTodo === false);
   function get(path) {
     return path.split('.').reduce(function (o, k) { return o == null ? undefined : o[k]; }, S);
   }
@@ -11,7 +12,7 @@
   var $$ = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
 
   // [확인 필요] 표시 켜기/끄기
-  if (S.showTodo === false) document.documentElement.classList.add('hide-todo');
+  if (hideEmpty) document.documentElement.classList.add('hide-todo');
 
   // 브랜드 이름
   var brand = (S.brand && S.brand.name) || '죽산들녘';
@@ -20,15 +21,27 @@
   document.title = pt ? pt + ' | ' + brand : brand + ' | ' + ((S.brand && S.brand.tagline) || '');
   var og = document.querySelector('meta[property="og:site_name"]'); if (og) og.setAttribute('content', brand);
 
-  // 글자 채우기: data-bind="contact.phone" (비어 있으면 [확인 필요] 또는 data-empty 문구)
+  function hideEl(el) {
+    if (!el) return;
+    el.hidden = true;
+    el.setAttribute('aria-hidden', 'true');
+  }
+
+  // 글자 채우기: data-bind="contact.phone" (비어 있으면 공개 화면에선 숨김)
   $$('[data-bind]').forEach(function (el) {
     var v = get(el.getAttribute('data-bind'));
-    if (v) { el.textContent = v; }
-    else { var e = el.getAttribute('data-empty'); el.innerHTML = e ? esc(e) + ' ' + TODO : TODO; }
+    if (v) { el.textContent = v; return; }
+    if (hideEmpty) {
+      hideEl(el.closest('.contact-card') || el.closest('.f-legal > span') || el);
+      return;
+    }
+    var e = el.getAttribute('data-empty');
+    el.innerHTML = e ? esc(e) + ' ' + TODO : TODO;
   });
 
   // 링크 버튼: data-link="links.smartstore" / data-tel / data-sms / data-mail
   function disable(el) {
+    if (hideEmpty) { hideEl(el); return; }
     el.classList.add('is-disabled'); el.setAttribute('aria-disabled', 'true'); el.removeAttribute('href');
     var lbl = el.getAttribute('data-off'); if (lbl) { var t = el.querySelector('.t'); (t || el).textContent = lbl; }
     el.addEventListener('click', function (ev) { ev.preventDefault(); });
@@ -46,6 +59,22 @@
   });
   $$('[data-mail]').forEach(function (el) { var m = S.contact && S.contact.email; m ? el.href = 'mailto:' + m : disable(el); });
 
+  // 카카오톡 채널 — links.kakaoChannelUrl 이 있으면 버튼·카드가 나타납니다
+  var kakao = ((S.links && S.links.kakaoChannelUrl) || '').trim();
+  $$('[data-kakao]').forEach(function (el) {
+    if (!kakao) { hideEl(el); return; }
+    el.hidden = false;
+    var url = kakao.replace(/\/$/, '');
+    var kind = el.getAttribute('data-kakao');
+    if (kind === 'chat' && /pf\.kakao\.com/i.test(url) && !/\/chat\/?$/.test(url)) url += '/chat';
+    el.href = url;
+    el.target = '_blank';
+    el.rel = 'noopener';
+  });
+  $$('[data-kakao-block]').forEach(function (el) {
+    if (kakao) { el.hidden = false; } else hideEl(el);
+  });
+
   // 상품 용량·가격
   function priceText(o) { return o.soldout ? '품절' : (o.price ? won(o.price) : '가격 준비 중'); }
   $$('[data-options]').forEach(function (el) {
@@ -62,8 +91,25 @@
       var ps = p.options.filter(function (o) { return o.price && !o.soldout; }).map(function (o) { return o.price; });
       v = ps.length ? Math.min.apply(null, ps).toLocaleString('ko-KR') + '원부터' : '가격 준비 중';
     }
-    if (v) el.textContent = v; else el.innerHTML = TODO;
+    if (v) el.textContent = v; else if (hideEmpty) { el.textContent = ''; } else el.innerHTML = TODO;
   });
+
+  // 공개 화면에서 [확인 필요]만 남은 항목은 숨깁니다
+  if (hideEmpty) {
+    $$('dd').forEach(function (dd) {
+      var hasTodo = dd.querySelector('.todo');
+      var rest = '';
+      dd.childNodes.forEach(function (n) {
+        if (n.nodeType === 3) rest += n.textContent;
+        else if (n.nodeType === 1 && !n.classList.contains('todo')) rest += n.textContent;
+      });
+      if (hasTodo && !rest.trim()) {
+        var dt = dd.previousElementSibling;
+        hideEl(dd);
+        if (dt && dt.tagName === 'DT') hideEl(dt);
+      }
+    });
+  }
 
   // 모바일 메뉴
   var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');

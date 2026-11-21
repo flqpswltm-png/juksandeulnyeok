@@ -16,7 +16,7 @@ window.SITE = {
     company: "유한회사 한걸음 농업회사법인"
   },
 
-  /* 2) 연락처 — 비워 두면("") 사이트에 [확인 필요]로 표시되고 버튼이 '준비 중'이 됩니다.
+  /* 2) 연락처 — 비워 두면("") 공개 화면에서는 해당 항목·버튼이 숨겨집니다.
         전화번호는 숫자와 - 만 쓰세요. 예) "063-000-0000" */
   contact: {
     phone: "",          // 주문·상담 대표 전화
@@ -29,7 +29,8 @@ window.SITE = {
   links: {
     smartstore: "",     // 예) "https://smartstore.naver.com/가게주소"
     funding: "",        // 와디즈/텀블벅 프로젝트(또는 오픈예정) 주소
-    fundingNotify: ""   // 펀딩 '알림 신청' 페이지 주소 (보통 funding과 같음)
+    fundingNotify: "",  // 펀딩 '알림 신청' 페이지 주소 (보통 funding과 같음)
+    kakaoChannelUrl: "" // 예) "https://pf.kakao.com/_xxxxx"  비우면 상담·채널추가 버튼이 숨겨집니다
   },
 
   /* 4) 법적 표시(바닥글) — 통신판매업 신고 후 번호를 넣으세요. */
@@ -39,7 +40,7 @@ window.SITE = {
     bizNo: "365-81-02883",
     mailOrderNo: "",    // 통신판매업 신고번호 예) "제2026-전북김제-0000호"
     privacyOfficer: "김광배", // 개인정보 보호책임자 (김민욱님 지정)
-    hosting: ""         // 공개 후 호스팅 업체 예) "Cloudflare, Inc."
+    hosting: "GitHub, Inc."  // 호스팅 업체
   },
 
   /* 5) 펀딩 */
@@ -104,6 +105,6 @@ window.SITE = {
     }
   },
 
-  /* 7) 미리보기용 노란 [확인 필요] 표시 — 공개 전 모두 채운 뒤 false로 바꾸세요. */
-  showTodo: true
+  /* 7) 미리보기용 노란 [확인 필요] 표시 — 공개 화면에서는 false. */
+  showTodo: false
 };
