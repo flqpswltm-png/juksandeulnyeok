@@ -12,7 +12,7 @@ window.SITE = {
         company(법적 상호)는 바닥글·판매원 표시에 그대로 쓰이니 바꾸지 마세요. */
   brand: {
     name: "죽산들녘",
-    tagline: "김제 죽산 들녘에서 수매한 우리 콩",
+    tagline: "김제 죽산 들녘에서 농작업 대행으로 기르고 거둔 콩",
     company: "유한회사 한걸음 농업회사법인"
   },
 
@@ -83,7 +83,7 @@ window.SITE = {
       name: "약콩(쥐눈이콩)",
       status: "오픈 예정",
       year: "2026년산",
-      origin: "",        // [확인 필요] 수매 산지 확인 후 예) "국산(전북 김제시)"
+      origin: "",        // [확인 필요] 산지 확인 후 예) "국산(전북 김제시)"
       options: [
         { weight: "500g", price: null, soldout: false },
         { weight: "1kg",  price: null, soldout: false },
@@ -95,7 +95,7 @@ window.SITE = {
       name: "팥",
       status: "오픈 예정",
       year: "2026년산",
-      origin: "",        // [확인 필요] 수매 산지 확인 후 입력
+      origin: "",        // [확인 필요] 산지 확인 후 입력
       options: [
         { weight: "500g", price: null, soldout: false },
         { weight: "1kg",  price: null, soldout: false },
