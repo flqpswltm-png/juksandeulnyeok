@@ -308,3 +308,11 @@ details p{color:var(--muted);font-size:.95rem}
 .btn-kakao{background:#fee500;color:#191919;border-color:#fee500}
 .btn-kakao:hover{background:#eddc00;color:#191919}
 [hidden]{display:none !important}
+
+/* ---- 2026-11-22 콤바인 사진(후보 4, combine-front) 잘림 보정 ----
+   홈 히어로(들녘 사진)의 object-position은 그대로 둔다. */
+.page-hero picture img{object-position:center 54%}
+@media (max-width:700px){
+  .page-hero picture img{object-position:center 54%}
+}
+.journey .photo.combine-photo img{object-position:42% 50%}
