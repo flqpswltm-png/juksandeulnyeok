@@ -109,20 +109,33 @@
     if (v) el.textContent = v; else if (hideEmpty) { el.textContent = ''; } else el.innerHTML = TODO;
   });
 
+  function visibleText(el) {
+    var rest = '';
+    el.childNodes.forEach(function (n) {
+      if (n.nodeType === 3) rest += n.textContent;
+      else if (n.nodeType === 1 && !n.classList.contains('todo')) rest += n.textContent;
+    });
+    return rest.trim();
+  }
+
   // 공개 화면에서 [확인 필요]만 남은 항목은 숨깁니다
   if (hideEmpty) {
     $$('dd').forEach(function (dd) {
-      var hasTodo = dd.querySelector('.todo');
-      var rest = '';
-      dd.childNodes.forEach(function (n) {
-        if (n.nodeType === 3) rest += n.textContent;
-        else if (n.nodeType === 1 && !n.classList.contains('todo')) rest += n.textContent;
-      });
-      if (hasTodo && !rest.trim()) {
+      if (dd.querySelector('.todo') && !visibleText(dd)) {
         var dt = dd.previousElementSibling;
         hideEl(dd);
         if (dt && dt.tagName === 'DT') hideEl(dt);
       }
+    });
+    // 표 칸이 비었거나 [확인 필요]만 남은 행도 숨겨, 빈 '배송비' 같은 행이 다시 보이지 않게 합니다
+    $$('table tr').forEach(function (tr) {
+      var tds = tr.querySelectorAll('td');
+      if (!tds.length) return;
+      var any = false;
+      for (var i = 0; i < tds.length; i++) {
+        if (visibleText(tds[i])) { any = true; break; }
+      }
+      if (!any) hideEl(tr);
     });
   }
 
