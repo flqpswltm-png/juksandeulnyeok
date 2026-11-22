@@ -316,3 +316,25 @@ details p{color:var(--muted);font-size:.95rem}
   .page-hero picture img{object-position:center 54%}
 }
 .journey .photo.combine-photo img{object-position:42% 50%}
+
+/* ---- 2026-11-22 일하는 방식 5단계 (파종·방제·수확·선별·유통) ---- */
+.steps-5{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.steps-5 li{padding:18px 16px}
+@media (max-width:1100px){
+  .steps-5{gap:10px}
+  .steps-5 li{padding:16px 12px}
+  .steps-5 h3{font-size:1.02rem}
+  .steps-5 p{font-size:.88rem}
+}
+@media (max-width:860px){
+  .steps-5{grid-template-columns:repeat(6,1fr);gap:12px}
+  .steps-5 li{grid-column:span 2;padding:18px 16px}
+  .steps-5 li:nth-child(4){grid-column:2 / span 2}
+  .steps-5 li:nth-child(5){grid-column:4 / span 2}
+  .steps-5 h3{font-size:1.1rem}
+  .steps-5 p{font-size:.94rem}
+}
+@media (max-width:520px){
+  .steps-5{grid-template-columns:1fr}
+  .steps-5 li,.steps-5 li:nth-child(4),.steps-5 li:nth-child(5){grid-column:auto}
+}
