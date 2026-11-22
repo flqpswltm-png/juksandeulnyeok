@@ -30,7 +30,22 @@
   // 글자 채우기: data-bind="contact.phone" (비어 있으면 공개 화면에선 숨김)
   $$('[data-bind]').forEach(function (el) {
     var v = get(el.getAttribute('data-bind'));
-    if (v) { el.textContent = v; return; }
+    if (v) {
+      var path = el.getAttribute('data-bind');
+      if (path === 'contact.phone') {
+        el.innerHTML = '<a href="tel:' + digits(v) + '">' + esc(v) + '</a>';
+        return;
+      }
+      if (path === 'contact.sms') {
+        el.innerHTML = '<a href="sms:' + digits(v) + '">' + esc(v) + '</a>';
+        return;
+      }
+      if (path === 'contact.email') {
+        el.innerHTML = '<a href="mailto:' + esc(v) + '">' + esc(v) + '</a>';
+        return;
+      }
+      el.textContent = v; return;
+    }
     if (hideEmpty) {
       hideEl(el.closest('.contact-card') || el.closest('.f-legal > span') || el);
       return;
